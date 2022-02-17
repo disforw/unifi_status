@@ -98,7 +98,7 @@ class UnifiStatusSwitch(SwitchEntity):
         """Initialize the switch."""
         self._hass = hass
         self._ctrl = ctrl
-        self._name = name + " " + switch
+        self._name = name + " restart " + switch
         self._switch = switch
         self._mac = None
         self._state = STATE_UNKNOWN
