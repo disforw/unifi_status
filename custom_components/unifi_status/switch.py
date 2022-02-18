@@ -87,7 +87,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         _LOGGER.error(f"Setup | Failed to scan aps: {ex}")
     else:
         for device in aps:
-            switch = device["name"].lower()
+            #switch = device["name"].lower()
+            switch = device["name"]
             add_entities([UnifiStatusSwitch(hass, ctrl, name, switch)], True)
 
 
@@ -98,7 +99,7 @@ class UnifiStatusSwitch(SwitchEntity):
         """Initialize the switch."""
         self._hass = hass
         self._ctrl = ctrl
-        self._name = name + " restart " + switch
+        self._name = name + " Restart " + switch
         self._switch = switch
         self._mac = None
         self._state = STATE_UNKNOWN
@@ -146,12 +147,14 @@ class UnifiStatusSwitch(SwitchEntity):
             _LOGGER.error(f"Update | Failed to scan aps: {ex}")
         else:
             for device in aps:
-                if self._switch == device["name"].lower():
+                #if self._switch == device["name"].lower():
+                if self._switch == device["name"]:
                     self._attributes["model"] = device["model"]
                     self._attributes["serial"] = device["serial"]
                     self._attributes["version"] = device["version"]
                     self._attributes["ip"] = device["ip"]
                     self._attributes["mac"] = device["mac"]
                     self._mac = device["mac"]
-                    self._attributes["uptime"] = device["uptime"]
+                    if self._attributes.get("uptime"):
+                        self._attributes["uptime"] = device["uptime"]
                     self._state = STATE_OFF

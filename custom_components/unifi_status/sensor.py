@@ -177,6 +177,7 @@ class UnifiStatusSensor(Entity):
             except APIError as ex:
                 _LOGGER.error(f"Failed to scan aps: {ex}")
             else:
+                _LOGGER.debug(f"aps full list: {aps}")
                 # Set the attributes based on device name - this may not be unique
                 # but is user-readability preferred
                 for devices in aps:
