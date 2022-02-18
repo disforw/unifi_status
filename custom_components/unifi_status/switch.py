@@ -159,4 +159,6 @@ class UnifiStatusSwitch(SwitchEntity):
                     self._attributes["ip"] = device["ip"]
                     self._attributes["mac"] = device["mac"]
                     self._mac = device["mac"]
+                    if device.get("uptime"):
+                        self._attributes["uptime"] = device["uptime"]
                     self._state = STATE_OFF
