@@ -184,7 +184,10 @@ class UnifiStatusSensor(Entity):
                 # but is user-readability preferred
                 for devices in aps:
                     if devices.get("upgradable"):
-                        self._attributes[devices["name"]] = devices["upgradable"]
+                        if devices.get("name"):
+                            self._attributes[devices["name"]] = devices["upgradable"]
+                        else:
+                            self._attributes[devices["ip"]] = devices["upgradable"]
                         self._state += 1
 
         else:

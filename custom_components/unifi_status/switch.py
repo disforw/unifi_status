@@ -4,6 +4,8 @@ Support for Unifi Status Units
 from __future__ import annotations
 
 import logging
+from pprint import pprint
+from pprint import pformat
 import voluptuous as vol
 
 from homeassistant.components.switch import PLATFORM_SCHEMA, SwitchEntity
@@ -87,7 +89,6 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         _LOGGER.error(f"Setup | Failed to scan aps: {ex}")
     else:
         for device in aps:
-            #switch = device["name"].lower()
             switch = device["name"]
             add_entities([UnifiStatusSwitch(hass, ctrl, name, switch)], True)
 
@@ -146,8 +147,8 @@ class UnifiStatusSwitch(SwitchEntity):
         except APIError as ex:
             _LOGGER.error(f"Update | Failed to scan aps: {ex}")
         else:
+            _LOGGER.debug(f"switch get_aps: {pformat(aps)}")
             for device in aps:
-                #if self._switch == device["name"].lower():
                 if self._switch == device["name"]:
                     self._attributes["model"] = device["model"]
                     self._attributes["serial"] = device["serial"]
@@ -155,6 +156,4 @@ class UnifiStatusSwitch(SwitchEntity):
                     self._attributes["ip"] = device["ip"]
                     self._attributes["mac"] = device["mac"]
                     self._mac = device["mac"]
-                    if self._attributes.get("uptime"):
-                        self._attributes["uptime"] = device["uptime"]
                     self._state = STATE_OFF
