@@ -4,6 +4,8 @@ Support for Unifi Status Units.
 from __future__ import annotations
 
 import logging
+from pprint import pprint
+from pprint import pformat
 import voluptuous as vol
 
 from homeassistant.helpers.entity import Entity
@@ -177,7 +179,7 @@ class UnifiStatusSensor(Entity):
             except APIError as ex:
                 _LOGGER.error(f"Failed to scan aps: {ex}")
             else:
-                _LOGGER.debug(f"aps full list: {aps}")
+                _LOGGER.debug(f"get_aps:\n{pformat(aps)}")
                 # Set the attributes based on device name - this may not be unique
                 # but is user-readability preferred
                 for devices in aps:
@@ -191,7 +193,7 @@ class UnifiStatusSensor(Entity):
                 # Check that function exists...potential errors on startup otherwise
                 if hasattr(self._ctrl, "get_healthinfo"):
                     self._alldata = self._ctrl.get_healthinfo()
-                    _LOGGER.debug(f"alldata: {self._alldata}")
+                    _LOGGER.debug(f"get_healthinfo:\n{pformat(self._alldata)}")
 
                     for sub in self._alldata:
                         if sub["subsystem"] == self._sensor:
