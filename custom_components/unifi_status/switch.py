@@ -89,7 +89,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         _LOGGER.error(f"Setup | Failed to scan aps: {ex}")
     else:
         for device in aps:
-            switch = device["name"]
+            if device.get("name"):
+                switch = device["name"]
+            else:
+                switch = device["ip"]
             add_entities([UnifiStatusSwitch(hass, ctrl, name, switch)], True)
 
 
