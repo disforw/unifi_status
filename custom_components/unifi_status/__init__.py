@@ -7,4 +7,4 @@ from __future__ import annotations
 DOMAIN = "unifi_status"
 PLATFORMS = ["sensor", "switch"]
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"
