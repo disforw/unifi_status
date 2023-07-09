@@ -35,12 +35,19 @@ from .const import (
 
 DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_HOST): cv.string,
-        vol.Required(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+        vol.Optional(CONF_HOST, default=DEFAULT_HOST): cv.string,
+        vol.Optional(CONF_SITE_ID, default=DEFAULT_SITE): cv.string,
         vol.Required(CONF_PASSWORD): cv.string,
-        vol.Optional(CONF_SSL, default=DEFAULT_SSL): cv.boolean,
-        vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
+        vol.Required(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_UNIFI_VERSION, default=DEFAULT_UNIFI_VERSION): cv.string,
         vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
+        vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): vol.Any(
+            cv.boolean, cv.isfile
+        ),
+        vol.Optional(CONF_MONITORED_CONDITIONS, default=DEFAULT_MONITORED): vol.All(
+            cv.ensure_list, [vol.In(POSSIBLE_MONITORED)]
+        ),
     }
 )
 
@@ -52,10 +59,34 @@ class UnifiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
-    async def async_step_user(
-        self,
-        user_input: dict[str, Any] | None = None,
-    ) -> FlowResult:
+    def async_step_user(hass, config, add_entities, discovery_info=None):
+    """Set up the Unifi sensor."""
+
+    name = config.get(CONF_NAME)
+    host = config.get(CONF_HOST)
+    username = config.get(CONF_USERNAME)
+    password = config.get(CONF_PASSWORD)
+    site_id = config.get(CONF_SITE_ID)
+    version = config.get(CONF_UNIFI_VERSION)
+    port = config.get(CONF_PORT)
+    verify_ssl = config.get(CONF_VERIFY_SSL)
+
+    try:
+        ctrl = Controller(
+            host,
+            username,
+            password,
+            port,
+            version,
+            site_id=site_id,
+            ssl_verify=verify_ssl,
+        )
+    except APIError as ex:
+        _LOGGER.error(f"Failed to connect to Unifi Controler: {ex}")
+        return False
+
+    
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Handle a flow initialized by the user."""
         errors = {}
         if user_input is not None:
