@@ -4,14 +4,13 @@ Support for Unifi Status Units.
 """
 from __future__ import annotations
 
-__version__ = "0.3.8"
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .coordinator import QnapCoordinator
+from .coordinator import UnifiCoordinator
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
