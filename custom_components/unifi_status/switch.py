@@ -25,7 +25,7 @@ from homeassistant.const import (
     STATE_UNAVAILABLE,
 )
 
-from . import DOMAIN, PLATFORMS, __version__
+from . import PLATFORMS, __version__
 
 from .const import (
     CONF_SITE_ID,
@@ -36,6 +36,7 @@ from .const import (
     DEFAULT_UNIFI_VERSION,
     DEFAULT_SITE,
     DEFAULT_VERIFY_SSL,
+    DOMAIN,
     MIN_TIME_BETWEEN_UPDATES,
 )
 
