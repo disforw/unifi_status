@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-
+DOMAIN = "unifi_status"
 CONF_SITE_ID = "site_id"
 CONF_UNIFI_VERSION = "version"
 
