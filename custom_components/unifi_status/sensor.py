@@ -1,10 +1,7 @@
-"""
-Support for Unifi Status Units.
-"""
+"""Unifi sensors."""
 from __future__ import annotations
 
 import logging
-from pprint import pprint
 from pprint import pformat
 import voluptuous as vol
 
@@ -21,8 +18,6 @@ from homeassistant.const import (
     CONF_MONITORED_CONDITIONS,
     CONF_VERIFY_SSL,
 )
-
-from . import DOMAIN, PLATFORMS, __version__
 
 from .const import (
     CONF_SITE_ID,
